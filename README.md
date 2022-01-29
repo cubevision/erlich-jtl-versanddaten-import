@@ -22,7 +22,7 @@ This project needs a config file with several options set in order to work prope
     "Host": "sample.host",
     "User": "sampleuser",
     "Password": "password",
-    "Port: 993,
+    "Port": 993,
     "SSL": true
   },
   "Provider": [
