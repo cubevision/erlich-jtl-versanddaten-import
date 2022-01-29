@@ -11,11 +11,11 @@ This project needs a config file with several options set in order to work prope
   "Versand": [
     {
       "Spediteur": "GLS Germany",
-      "VersandartId: 14
+      "VersandartId": 14
     },
     {
       "Spediteur": "WINNER Spedition",
-      "VersandartId: 10
+      "VersandartId": 10
     }
   },
   "Imap": {
@@ -54,3 +54,8 @@ The config consists of several blocks, some of these are self explanatory and th
 The app needs to be configured with a Versandart to Id mapping.
 The app can not know beforehand about the existing mappings in Wawi database and export labels.
 In order to lookup the Ids the user needs to connect to the database and look these up.
+
+### Provider
+
+The app will connect to the mailbox via IMAP and use the provided config specified in `Imap`.
+The process needs to know which mails to process and which reader to use for it.
