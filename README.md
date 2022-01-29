@@ -17,7 +17,7 @@ This project needs a config file with several options set in order to work prope
       "Spediteur": "WINNER Spedition",
       "VersandartId": 10
     }
-  },
+  ],
   "Imap": {
     "Host": "sample.host",
     "User": "sampleuser",
