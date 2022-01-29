@@ -12,7 +12,8 @@ namespace JTLVersandImport.Reader
         private readonly int versandArt;
         public AmmonReader(Stream stream, Config config) : base(stream, config)
         {
-            versandArt = GetMappedCarrier("UPS");
+            Versandart versandart = config.Versand.First((versand) => versand.Spediteur.ToUpper().Contains("UPS"));
+            versandArt = GetMappedCarrier(versandart.Spediteur);
         }
 
         private bool ShouldSkipRow(RangeColumn[] rangeColumns)
