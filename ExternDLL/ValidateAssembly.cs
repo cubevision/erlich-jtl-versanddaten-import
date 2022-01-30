@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +22,7 @@ namespace JTLVersandImport
         private void ValidateAndLoadAssemblys()
         {
             _wawiPath = FindInstallLocation();
-            if(!string.IsNullOrWhiteSpace(this._wawiPath) && ValidExternDllVersion())
+            if (!string.IsNullOrWhiteSpace(this._wawiPath) && ValidExternDllVersion())
             {
                 this.IsValid = true;
                 AppDomain.CurrentDomain.AssemblyResolve += LoadAssemblys;

@@ -8,5 +8,6 @@ namespace JTLVersandImport.Models
         public ImapCredentials Imap { get; set; }
         public Provider[] Provider { get; set; }
         public DatabaseConnection DatabaseConnection { get; set; }
+        public ErrorConfig ErrorConfig { get; set; }
     }
 }

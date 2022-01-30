@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JTLVersandImport.Repository
 {
@@ -15,7 +11,7 @@ namespace JTLVersandImport.Repository
         {
             _connection = new SqlConnection(connectionString);
         }
-        
+
         public virtual T PopulateRecord(SqlDataReader reader)
         {
             return null;

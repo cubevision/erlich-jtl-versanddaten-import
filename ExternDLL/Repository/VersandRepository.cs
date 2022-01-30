@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Objects;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using JTLVersandImport.Models;
 
 namespace JTLVersandImport.Repository
@@ -13,9 +9,9 @@ namespace JTLVersandImport.Repository
     {
         public VersandRepository(string connectionString)
             : base(connectionString)
-        {}
+        { }
         public VersandRepository(string server, string datenbank, string benutzer, string passwort) : this($"Data Source = {server}; Initial Catalog = {datenbank}; User Id = {benutzer}; Password = {passwort}; ")
-        {}
+        { }
         public IEnumerable<Versand> GetAll()
         {
             using (var command = new SqlCommand("SELECT * FROM dbo.tVersand"))

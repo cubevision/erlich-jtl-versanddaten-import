@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Data.SqlTypes;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JTLVersandImport.Models
 {
@@ -24,7 +20,7 @@ namespace JTLVersandImport.Models
         public int VerpackZeitSek { get; set; }
         public DateTime? Versendet { get; set; }
         public int Status { get; set; }
-        public string ShipmentId{ get; set; }
+        public string ShipmentId { get; set; }
         public string Reference { get; set; }
         public string ShipmentOrderId { get; set; }
         public SqlBytes RowVersion { get; set; }

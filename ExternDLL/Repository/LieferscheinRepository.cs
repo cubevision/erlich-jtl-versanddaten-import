@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Objects;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using JTLVersandImport.Models;
 
 namespace JTLVersandImport.Repository
@@ -13,9 +8,9 @@ namespace JTLVersandImport.Repository
     {
         public LieferscheinRepository(string connectionString)
             : base(connectionString)
-        {}
+        { }
         public LieferscheinRepository(string server, string datenbank, string benutzer, string passwort) : this($"Data Source = {server}; Initial Catalog = {datenbank}; User Id = {benutzer}; Password = {passwort}; ")
-        {}
+        { }
 
         public IEnumerable<Lieferschein> GetAll()
         {
