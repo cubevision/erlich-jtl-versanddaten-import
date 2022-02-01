@@ -89,7 +89,7 @@ namespace JTLVersandImport.Repository
                 command.Parameters.Add(new SqlParameter("cLogistiker", versand.Logistiker));
                 command.Parameters.Add(new SqlParameter("cFulfillmentCenter", versand.FullfillmentCenter));
                 command.Parameters.Add(new SqlParameter("nVerpackZeitSek", versand.VerpackZeitSek));
-                command.Parameters.Add(new SqlParameter("dVersendet", DBNull.Value));
+                command.Parameters.Add(new SqlParameter("dVersendet", versand.Versendet));
                 command.Parameters.Add(new SqlParameter("nStatus", versand.Status));
                 command.Parameters.Add(new SqlParameter("cShipmentId", versand.ShipmentId));
                 command.Parameters.Add(new SqlParameter("cReference", versand.Reference));
@@ -136,7 +136,7 @@ namespace JTLVersandImport.Repository
                 command.Parameters.Add(new SqlParameter("cLogistiker", versand.Logistiker));
                 command.Parameters.Add(new SqlParameter("cFulfillmentCenter", versand.FullfillmentCenter));
                 command.Parameters.Add(new SqlParameter("nVerpackZeitSek", versand.VerpackZeitSek));
-                command.Parameters.Add(new SqlParameter("dVersendet", DBNull.Value));
+                command.Parameters.Add(new SqlParameter("dVersendet", versand.Versendet));
                 command.Parameters.Add(new SqlParameter("nStatus", versand.Status));
                 command.Parameters.Add(new SqlParameter("cShipmentId", versand.ShipmentId));
                 command.Parameters.Add(new SqlParameter("cReference", versand.Reference));

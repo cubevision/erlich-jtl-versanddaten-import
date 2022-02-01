@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Win32;
 
-namespace JTLVersandImport
+namespace JTLVersandImport.Services
 {
     public class ValidateAssembly
     {

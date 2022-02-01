@@ -18,6 +18,9 @@ namespace JTLVersandImport
         {
             [Option('c', "config", Default = "", Required = false, HelpText = "Path to config file")]
             public string ConfigPath { get; set; }
+
+            [Option('d', "date", Default = "", Required = false, HelpText = "Date in dd.MM.yyyy to process import")]
+            public string Date { get; set; }
         }
 
         [STAThread]
@@ -25,29 +28,32 @@ namespace JTLVersandImport
         {
             Parser.Default.ParseArguments<Options>(args).WithParsed(parsedArgs =>
             {
-                var config = ConfigService.GetConfig(parsedArgs.ConfigPath);
-
-                InstrumentSmtpAppender(config);
+                Config config = null;
+                DateTime sent;
 
                 try
                 {
+                    config = ConfigService.GetConfig(parsedArgs.ConfigPath);
+                    try
+                    {
+                        sent = DateTime.ParseExact(parsedArgs.Date, "dd.MM.yyyy", null);
+                    } catch (FormatException) {
+                        sent = DateTime.Now;
+                    }
+
+                    InstrumentSmtpAppender(config);
                     ValidateAssembly validateAssembly = new ValidateAssembly();
                     if (!validateAssembly.IsValid)
-                        return;
+                    {
+                        throw new Exception("JTLwawiextern.dll not found");
+                    }
+                    new ConnectionService(config).CheckConnection();
+                    RunJob(config, sent);
                 }
                 catch (Exception e)
                 {
                     logger.Error(e);
                     Environment.Exit(1);
-                }
-
-                try
-                {
-                    RunJob(config);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e);
                 }
             });
         }
@@ -60,17 +66,16 @@ namespace JTLVersandImport
             ((log4net.Repository.Hierarchy.Logger)logger.Logger).AddAppender(smtpAppender);
         }
 
-        static void RunJob(Config config)
+        static void RunJob(Config config, DateTime sent)
         {
             logger.Debug("######## running new job ########");
             var importerService = new VersanddatenImporterService(config.DatabaseConnection.Server, config.DatabaseConnection.Database, config.DatabaseConnection.User, config.DatabaseConnection.Password);
             var emailService = new EmailService(config);
-            DateTime lastExecutionDatetime = JobExecutionManagerService.GetLastExecutionDate().AddDays(1);
             var versanddatenExport = new List<VersanddatenExport>();
 
             foreach (var provider in config.Provider)
             {
-                Stream stream = emailService.GetAttachment(provider, lastExecutionDatetime);
+                Stream stream = emailService.GetAttachment(provider, sent);
                 if (stream != null)
                 {
                     Type readerType = Type.GetType(provider.Reader);
@@ -81,7 +86,7 @@ namespace JTLVersandImport
             }
 
             importerService.Import(versanddatenExport);
-            JobExecutionManagerService.UpdateExecutionDate();
+            logger.Debug("######## job finished ########");
         }
     }
 }

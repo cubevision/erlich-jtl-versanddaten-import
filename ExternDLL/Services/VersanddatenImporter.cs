@@ -4,7 +4,6 @@ using System.Linq;
 using JTLVersandImport.Models;
 using JTLVersandImport.Repository;
 using JTLwawiExtern;
-using JTLwawiExtern.VersanddatenImport;
 using log4net;
 
 namespace JTLVersandImport.Services
@@ -15,15 +14,20 @@ namespace JTLVersandImport.Services
         private readonly CJTLwawiExtern wawiExtern;
         private readonly LieferscheinRepository lieferscheinRepository;
         private readonly VersandRepository versandRepository;
-        private readonly VersanddatenImporter versandImporter;
+        private readonly string server;
+        private readonly string datenbank;
+        private readonly string benutzer;
+        private readonly string passwort;
 
         public VersanddatenImporterService(string server, string datenbank, string benutzer, string passwort)
         {
-            logger.Debug($"initializing {nameof(VersanddatenImporterService)} with parameters: {server}:{datenbank}:{benutzer}");
+            this.server = server;
+            this.datenbank = datenbank;
+            this.benutzer = benutzer;
+            this.passwort = passwort;
             wawiExtern = new CJTLwawiExtern();
             lieferscheinRepository = new LieferscheinRepository(server, datenbank, benutzer, passwort);
             versandRepository = new VersandRepository(server, datenbank, benutzer, passwort);
-            versandImporter = wawiExtern.VersanddatenImporter(server, datenbank, benutzer, passwort, 1);
         }
 
         private Dictionary<string, List<VersanddatenExport>> GetGroupedVersanddatenExport(List<VersanddatenExport> versanddatenexport)
@@ -67,6 +71,7 @@ namespace JTLVersandImport.Services
                             var versand = existingVersandElements.ElementAt(i);
                             versand.IdentCode = versandExport.TrackingNummer;
                             versand.VersandartId = versandExport.Spediteur;
+                            versand.Versendet = versandExport.Versanddatum;
                             logger.Debug($"updating paket {versand.ID}");
                             versandRepository.UpdateVersand(versand);
                         }
@@ -76,26 +81,16 @@ namespace JTLVersandImport.Services
                             versand.IdentCode = versandExport.TrackingNummer;
                             versand.VersandartId = versandExport.Spediteur;
                             versand.LieferscheinId = lieferschein.ID;
+                            versand.Versendet = versandExport.Versanddatum;
                             logger.Debug($"creating new paket {versand.ID}");
                             versandRepository.InsertVersand(versand);
                         }
                     }
-                    existingVersandElements = versandRepository.GetByLieferscheinId(lieferschein.ID.ToString());
 
-                    foreach (var existingVersandElement in existingVersandElements)
-                    {
-                        logger.Debug("adding versanddatenimport to JTL Wawi external dll versandatenimport");
-                        versandImporter.Add(
-                            $"{lieferschein.LieferscheinNummer}${existingVersandElement.ID}",
-                            existingVersandElement.Versendet ?? DateTime.Now,
-                            existingVersandElement.IdentCode,
-                            ""
-                        );
-                    }
+                    logger.Debug($"triggering workflow for Lieferschein {lieferschein.LieferscheinNummer}");
+                    wawiExtern.JTL_WorkflowLieferschein(server, datenbank, benutzer, passwort, 1, lieferschein.ID, 3);
                 }
             }
-            logger.Debug("applying versanddatenimport to JTL Wawi external dll versandatenimport");
-            versandImporter.Apply();
         }
     }
 }

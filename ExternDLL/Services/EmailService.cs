@@ -17,17 +17,18 @@ namespace JTLVersandImport.Services
             this.config = config;
         }
 
-        public Stream GetAttachment(Provider provider, DateTime sentSince)
+        public Stream GetAttachment(Provider provider, DateTime sent)
         {
             logger.Debug($"initializing imap with arguments {config.Imap.Host}, {config.Imap.Port}, {config.Imap.SSL}");
             using (ImapClient client = new ImapClient(config.Imap.Host, config.Imap.Port, config.Imap.SSL))
             {
                 client.Login(config.Imap.User, config.Imap.Password, AuthMethod.Login);
                 logger.Debug("login to mail account successful");
-                logger.Debug($"searching for messages since {sentSince} from sender {provider.Sender}");
+                logger.Debug($"searching for messages sent on {sent} from sender {provider.Sender}");
                 var uids = client.Search(
                     SearchCondition
-                        .SentSince(sentSince)
+                        .SentSince(sent)
+                        .And(SearchCondition.SentBefore(sent.AddDays(1)))
                         .And(SearchCondition.From(provider.Sender))
                         .And(SearchCondition.Subject(provider.Subject)));
                 Stream attachmentStream = null;

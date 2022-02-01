@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{72809D15-8B5C-4B89-9BF0-D4A926962E75}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JTLVersandImport</RootNamespace>
     <AssemblyName>JTLVersandImport</AssemblyName>
@@ -141,12 +141,13 @@
     <Compile Include="Repository\LieferscheinRepository.cs" />
     <Compile Include="Repository\VersandRepository.cs" />
     <Compile Include="Services\ConfigService.cs" />
+    <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\JobExecutionManagerService.cs" />
     <Compile Include="Services\JsonUnmarshaller.cs" />
     <Compile Include="Services\TrackingNumberCorrector.cs" />
     <Compile Include="Services\VersanddatenImporter.cs" />
-    <Compile Include="ValidateAssembly.cs" />
+    <Compile Include="Services\ValidateAssembly.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
